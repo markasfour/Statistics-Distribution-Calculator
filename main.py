@@ -190,8 +190,7 @@ def negative_binomial(argv):
 def poisson(argv):
     y = float(argv[0])
     calculate = False
-    calculate2 = False
-    if (len(argv) == 2 or len(argv) == 3):
+    if (len(argv) == 2):
         if (isnumber(argv[1])):
             x = float(argv[1])
             calculate = True
@@ -205,43 +204,27 @@ def poisson(argv):
     sd = math.sqrt(variance)
     print 'SD(X) = ', sd
     if (calculate):
+        ans = 0.0
+        ans_LE = 0.0
+        ans_L = 0.0
+        ans_GE = 0.0
+        ans_G = 0.0
         ans = p_calc(y, x) 
         print 'P(X =', x, ') =', ans 
-        if (len(argv) == 3):
-            ans_LE = 0.0
-            ans_L = 0.0
-            ans_GE = 0.0
-            ans_G = 0.0
-            if (isnumber(argv[2])):
-                n = float(argv[2])
-                calculate2 = True
-            else:
-                print 'Please enter numeric value for n'
-            if (calculate2):
-                if (x <= n / 2):
-                    for i in range (0, int(x) + 1):
-                        ans_LE += p_calc(y, i)
-                else:
-                    for i in range (int(x) + 1, int(n) + 1):
-                        ans_LE += p_calc(y, i)
-                        ans_LE = 1 - ans
-                print 'P(X <=', x, ') =', ans_LE            #P(X <= x)
+        
+        for i in range (0, int(x) + 1):
+            ans_LE += p_calc(y, i)
+        print 'P(X <=', x, ') =', ans_LE            #P(X <= x)
 
-                if (x <= n / 2):
-                    for i in range (0, int(x)):
-                        ans_L += p_calc(y, i)
-                else:
-                    for i in range (int(x), int(n) + 1):
-                        ans_L += p_calc(y, i)
-                        ans_L = 1 - ans
-                print 'P(X <', x, ') =', ans_L              #P(X < x)
+        for i in range (0, int(x)):
+            ans_L += p_calc(y, i)
+        print 'P(X <', x, ') =', ans_L              #P(X < x)
 
-                ans_GE = 1 - ans_L
-                print 'P(X >=', x, ') =', ans_GE            #P(X >= x)
+        ans_GE = 1 - ans_L
+        print 'P(X >=', x, ') =', ans_GE            #P(X >= x)
 
-                ans_G = 1 - ans_LE
-                print 'P(X >', x, ') =', ans_G              #P(X > x)
-
+        ans_G = 1 - ans_LE
+        print 'P(X >', x, ') =', ans_G              #P(X > x)
 
 def main(argv):
     if (argv[0].isalpha()):                         #check if first arg is a letter
@@ -273,7 +256,7 @@ def main(argv):
  
         elif (argv[0] == 'P'):                      #if Poisson 
             print 'P'
-            if (len(argv) > 4 or len(argv) < 2):
+            if (len(argv) > 3 or len(argv) < 2):
                 print 'Invalid number of arguments'
             elif (isnumber(argv[1])):
                 poisson(argv[1:])
